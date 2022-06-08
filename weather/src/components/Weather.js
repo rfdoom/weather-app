@@ -8,15 +8,19 @@ const BASE_URL = 'http://api.weatherapi.com/v1'
 // Use props to pull the return JSON from Location.js
 const Weather = (props) => {
 
-  
-  const { jsonData } = props; // this {} format is how i get the entire JSON data
   const [userWeather, setUserWeather] = useState({});
+  const city = props.City
+  const currentWeather = `http://api.weatherapi.com/v1/current.json?key=${KEY}&q=${city}&aqi=no`
 
-  const getWData = () => {
-    fetch(`http://api.weatherapi.com/v1/current.json?key=${KEY}&q=${jsonData.lat},${jsonData.lon}&aqi=no`)
-    .then(res => {
-      setUserWeather(res.data)
-    })
+  const getWData = async () => {
+    try {
+      const response = await axios.get(currentWeather);
+      console.log(response.data);
+      setUserWeather(response.data)
+    }
+    catch (error) {
+      throw new Error(error)
+    }
   }
 
   useEffect(() => {
@@ -25,10 +29,9 @@ const Weather = (props) => {
 
   return (
     <>
-      Latitude = { jsonData.lat }
-      City = { jsonData.city }
+      <h1>{props.City}</h1>
       <br />
-      {Object.keys(userWeather).map((key) => <h1>{userWeather[key]}</h1>)}
+      <h1>Lat={props.Lat}, Lon={props.Lon}</h1>
     </>
   )
 }
@@ -44,3 +47,9 @@ states.forEach((state) => {
     cities_of_state = csc.getCitiesOfState(countryCode, state.isoCode)
     console.log(state, ":", cities_of_state)
 })*/
+
+// Current weather = userWeather.current.condition.text
+// Current weather icon = userWeather.current.condition.icon
+// Last Updated = userWeather.current.last_updated
+// Temperature F = userWeather.current.temp_f
+// Real feel = userWeather.current.feelslike_f

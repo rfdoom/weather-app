@@ -25,7 +25,7 @@ const Location = () => {
 
   return (
     <>
-      <Weather jsonData={userData} />
+      <Weather Lat={userData.lat} Lon={userData.lon} City={userData.city}/>
     </>
 
     
